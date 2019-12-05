@@ -36,14 +36,17 @@ public class potScript : MonoBehaviour
         if (!isPlanted && PlayerPrefs.GetInt(planttoSpawn + "Seed") > 0)
         {
             GameObject newPlant = (GameObject)Resources.Load("Flowers/" + planttoSpawn) as GameObject;
+            GameObject v2Plant = newPlant;
+            v2Plant.GetComponent<plantItem>().potParent = this.gameObject;
             newPlant.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, -3);
             if (PlayerPrefs.GetInt(planttoSpawn + "Seed") > 0 || PlayerPrefs.GetInt(planttoSpawn + "(Clone)Seed") > 0)
             {
+                PlayerPrefs.SetInt(this.gameObject.name + planttoSpawn + "GrownToday", DateTime.Today.Day);
                 isPlanted = true;
                 Instantiate(newPlant);
                 newPlant.name = newPlant.GetComponent<plantItem>().PLANTNAME;
                 newPlant.GetComponent<plantItem>().potParent = this.gameObject;
-                newPlant.GetComponent<plantItem>().growthStage = 0;
+                //newPlant.GetComponent<plantItem>().growthStage = 0;
                 newPlant.GetComponent<plantItem>().anim.SetTrigger("Plant");
                 flowerStage = 0; // <----------------------------------------------------------flower stage is for storing stage of contained flower on app quit
                 PlayerPrefs.SetInt(this.name + "FlowerStage", 0);
@@ -51,6 +54,11 @@ public class potScript : MonoBehaviour
                 containsFlower = planttoSpawn;
                 PlayerPrefs.SetString(this.name + "PlantedTrueFalse", "True"); // <---------------------------------------------------------- setting the playerprefbool to true as soon as it is planted
                 PlayerPrefs.SetInt(planttoSpawn + "Seed", PlayerPrefs.GetInt(planttoSpawn + "Seed") - 1);
+                newPlant.GetComponent<plantItem>().potParent = this.gameObject;
+                if (newPlant.GetComponent<plantItem>().potParent = this.gameObject)
+                {
+                    Debug.Log("This should have set the pot parent");
+                }
             }
         }
     }

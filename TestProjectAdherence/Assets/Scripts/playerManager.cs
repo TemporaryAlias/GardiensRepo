@@ -7,6 +7,9 @@ using Unity.Notifications.Android;
 
 public class playerManager : MonoBehaviour
 {
+    public int TESTINGINT;
+    public float WAITTIMEFLOAT;
+
     #region Alarm System UI
     [Header("Alarm System UI")]
     [SerializeField] GameObject AlarmObject;
@@ -55,6 +58,9 @@ public class playerManager : MonoBehaviour
 
     [Header("Med Canvas UI")]
     [SerializeField] GameObject MED_UI_CANVAS;
+
+    [Header("Ask Canvas UI")]
+    [SerializeField] GameObject ASK_UI_CANVAS;
     #endregion
 
     #region Logging Info Display Ui
@@ -99,10 +105,7 @@ public class playerManager : MonoBehaviour
             return _instance;
         }
     }
-
-
     
-
     private void Awake()
     {
         
@@ -117,7 +120,6 @@ public class playerManager : MonoBehaviour
     {
         TouchManagement();
         GrowingPeriodTimeChecking();
-       
     }
 
     void TouchManagement()
@@ -147,10 +149,11 @@ public class playerManager : MonoBehaviour
 
                     if (Input.GetTouch(0).phase == TouchPhase.Ended)
                     {
+                        activatequestion();
                         switch (go.name)
                         {
                             case ("Planting Icon"):
-                                go.transform.position = Vector3.Lerp(go.transform.position, plantingIconZero.position, 2f);
+                                go.transform.position = Vector3.Lerp(go.transform.position, plantingIconZero.position, 2f * Time.deltaTime);
                                 if(PotToAlter.gameObject.GetComponent<potScript>().isPlanted==true)
                                 {
                                     Debug.Log("Already planted");
@@ -164,7 +167,7 @@ public class playerManager : MonoBehaviour
                                 break;
 
                             case ("Harvest Icon"):
-                                go.transform.position = Vector3.Lerp(go.transform.position, harvestIconZero.position, 2f);
+                                go.transform.position = Vector3.Lerp(go.transform.position, harvestIconZero.position, 2f * Time.deltaTime);
                                 if (PlantToAdvance != null && PlantToAdvance.GetComponent<plantItem>().growthStage>1)
                                 {
                                     //Commented out to test the animations
@@ -172,57 +175,30 @@ public class playerManager : MonoBehaviour
 
                                     PlantToAdvance.GetComponent<plantItem>().anim.SetTrigger("Harvest");
 
-                                    if (go.gameObject.GetComponentInChildren<detectionScript>(QueryTriggerInteraction.Collide.Equals(gameObject.tag == "FlowerPot")) == true)
-                                    {
-
-                                    }
+                                   
                                 }
                                 break;
 
                             case ("Growing Icon"):
-                                go.transform.position = Vector3.Lerp(go.transform.position, growingIconZero.position, 2f);
-                                if (PlantToAdvance != null && PlantToAdvance.GetComponent<plantItem>().growthStage < 2)
+                                go.transform.position = Vector3.Lerp(go.transform.position, growingIconZero.position, 2f * Time.deltaTime);
+                                if (PlantToAdvance != null && PlantToAdvance.GetComponent<plantItem>().growthStage < 2 
+                                    && PlayerPrefs.GetInt(PlantToAdvance.GetComponent<plantItem>().potParent.name+PlantToAdvance.GetComponent<plantItem>().PLANTNAME+"GrownToday") - TESTINGINT!=DateTime.Today.Day) //<-----------testing int is here
                                 {
                                     foreach (GameObject AlarmObject in AlarmObjectsList)
                                     {
-                                        if (Mathf.Abs(PlayerPrefs.GetInt(AlarmObject.name + "Hour") - DateTime.Now.Hour) <= 1) //<--------fix 
-                                        {
+                                        
                                             Debug.Log("Grow Connected to Player Pref Time");
+                                            PlayerPrefs.SetInt(PlantToAdvance.GetComponent<plantItem>().potParent.name + PlantToAdvance.GetComponent<plantItem>().PLANTNAME + "GrownToday", DateTime.Today.Day);
 
-                                            //Commented out to test the animations
-                                            //PlantToAdvance.GetComponent<plantItem>().AdvanceStage();
+                                        //Commented out to test the animations
+                                        //PlantToAdvance.GetComponent<plantItem>().AdvanceStage();
 
                                             PlantToAdvance.GetComponent<plantItem>().anim.SetTrigger("Grow");
 
                                             TryProgessTutorial();
-                                        }
-                                    }
-
-                                    /*
-                                    if (dateTimes.Count > 0)
-                                    {
-                                        
-                                        foreach (DateTime time in dateTimes)
-                                        {
-                                            if (Mathf.Abs(time.Hour - DateTime.Now.Hour) <= 1)
-                                            {
-                                                Debug.Log("Grow Connected to Date Time");
-                                                PlantToAdvance.GetComponent<plantItem>().AdvanceStage();
-                                            }
-                                            else
-                                            {
-                                                Debug.Log("NOT CORRECT GROWING PERIOD");
-                                            }
-                                        }
-                                        
                                         
                                     }
-                                    else if(dateTimes.Count <= 0)
-                                    {
-                                        Debug.Log("Grow not connected to date Time");
-                                        PlantToAdvance.GetComponent<plantItem>().AdvanceStage();
-                                    }
-                                    */
+                                    
                                 }
                                 break;
                         }
@@ -233,9 +209,59 @@ public class playerManager : MonoBehaviour
         else if(plantingIcon!=null&&harvestingIcon!=null&&growingIcon!=null)
         {
             plantingIcon.transform.position = Vector3.Lerp(plantingIcon.transform.position, plantingIconZero.position, 2f);
-            harvestingIcon.transform.position = Vector3.Lerp(harvestingIcon.transform.position, harvestIconZero.position, 2f);
+            harvestingIcon.transform.position = Vector3.Lerp(harvestingIcon.transform.position, harvestIconZero.position, 2f );
             growingIcon.transform.position = Vector3.Lerp(growingIcon.transform.position, growingIconZero.position, 2f);
         }
+    }
+    void activatequestion()
+    {
+        if(PlayerPrefs.GetString("PillTakenToday"+DateTime.Today.Day)!="True")
+        {
+            
+            if (PlayerPrefs.GetInt("answerHour") > 0 && PlayerPrefs.GetInt("answerMinute") > 0)
+            {
+                Debug.Log("Got this far");
+                TimeSpan TS = new DateTime(DateTime.Now.Year,
+                                    DateTime.Now.Month,
+                                    DateTime.Now.Day,
+                                    PlayerPrefs.GetInt("answerHour"),
+                                    PlayerPrefs.GetInt("answerMinute"),
+                                    PlayerPrefs.GetInt("answerSecond"))
+                                    - DateTime.Now;
+                
+                if (Mathf.Abs((float)TS.TotalSeconds)> WAITTIMEFLOAT)
+                {
+                    Debug.Log("Got this far");
+                    ASK_UI_CANVAS.SetActive(true);
+                }
+            }
+            else
+            {
+                ASK_UI_CANVAS.SetActive(true);
+            }
+        }
+    }
+    
+    public void yes_no(Button buttonName)
+    {
+        
+        if (buttonName.name == "Yes"|| buttonName.name == "No")
+        {
+            
+            PlayerPrefs.SetInt("answerHour", DateTime.Now.Hour);
+            PlayerPrefs.SetInt("answerMinute", DateTime.Now.Minute);
+            PlayerPrefs.SetInt("answerSecond", DateTime.Now.Second);
+            if(buttonName.name == "Yes")
+            {
+                PlayerPrefs.SetString("PillTakenToday" + DateTime.Today.Day, "True");
+            }
+            if (buttonName.name == "No")
+            {
+                PlayerPrefs.SetString("PillTakenToday" + DateTime.Today.Day, "sdfsfs");
+            }
+            buttonName.gameObject.transform.parent.gameObject.SetActive(false);
+        }
+
     }
 
     DateTime AddnewDateTime(Text minute, Text hour, Text pmam)
@@ -347,7 +373,6 @@ public class playerManager : MonoBehaviour
         //opening log panel
         if (theButtonClicked.name == LOG_UI_CANVAS.name + " Button")
         {
-            //LOG_UI_CANVAS.SetActive(true);
             LOG_UI_CANVAS.GetComponent<MenuPanel>().OpenPanel();
         }
 
@@ -357,6 +382,12 @@ public class playerManager : MonoBehaviour
             //MED_UI_CANVAS.SetActive(true);
             MED_UI_CANVAS.GetComponent<MenuPanel>().OpenPanel();
         }
+
+        if(theButtonClicked.name == "DisplayInfoPanelCloseButton")
+        {
+            theButtonClicked.gameObject.transform.parent.gameObject.SetActive(false);
+        }
+
 
         if (theButtonClicked.name=="CloseButton")
         {
@@ -385,9 +416,7 @@ public class playerManager : MonoBehaviour
         //Debug.Log(Mathf.Abs(RelockerTS.Minutes));
         if (Mathf.Abs((float)RelockerTS.TotalMinutes) > PeriodLength)
         {
-
-            GrowingPeriodButton.gameObject.SetActive(true);
-            GrowingPeriod = false;
+            
 
             #region Temporary Code (Unused)
             /*
