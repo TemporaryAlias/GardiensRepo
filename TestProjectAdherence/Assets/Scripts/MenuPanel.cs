@@ -5,6 +5,9 @@ using UnityEngine;
 public class MenuPanel : MonoBehaviour {
 
     Animator anim;
+    public AudioSource output;
+    [SerializeField] AudioClip open;
+    [SerializeField] AudioClip close;
 
     void Start() {
         anim = GetComponent<Animator>();
@@ -13,11 +16,15 @@ public class MenuPanel : MonoBehaviour {
     public void OpenPanel() {
         EnablePanel();
         anim = GetComponent<Animator>();
+        output.clip = open;
+        output.Play();
         anim.SetTrigger("Open");
     }
 
 
     public void ClosePanel() {
+        output.clip = close;
+        output.Play();
         anim.SetTrigger("Close");
     }
 

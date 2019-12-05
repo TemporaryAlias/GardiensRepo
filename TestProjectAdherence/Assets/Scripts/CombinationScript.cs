@@ -10,9 +10,13 @@ public class CombinationScript : MonoBehaviour
     [SerializeField] Text B_Option;
     [SerializeField] Image comboImage;
     [SerializeField] Sprite invalidSprite;
-
+    [SerializeField] AudioClip valid;
+    [SerializeField] AudioClip invalid;
+    [SerializeField] AudioClip combined;
+    public AudioSource output;
     //accessing list of names
     playerManager thePM;
+    bool soundcheck;
     
 
     bool inMenu = false;
@@ -46,12 +50,21 @@ public class CombinationScript : MonoBehaviour
 
         if (valC < thePM.FlowerNames.Count && PlayerPrefs.GetInt(A_Option.text + "Flower") > 0 && PlayerPrefs.GetInt(B_Option.text + "Flower") > 0)
         {
+            output.clip = valid;
+            output.Play();
             GameObject newPlant = (GameObject)Resources.Load("Flowers/" + thePM.FlowerNames[valC]) as GameObject;
             
             combo.sprite = newPlant.GetComponent<plantItem>().flowerStage;
+            soundcheck = false;
         }
         else
         {
+            if (soundcheck == false)
+            {
+                output.clip = invalid;
+                output.Play();
+                soundcheck = true;
+            }
             combo.sprite = invalidSprite;
         }
     }
@@ -60,6 +73,8 @@ public class CombinationScript : MonoBehaviour
     {
         if (A_Option != null && B_Option != null)
         {
+            output.clip = combined;
+            output.Play();
             combiningMethod(A_Option, B_Option);
         }
     }

@@ -16,7 +16,6 @@ public class potScript : MonoBehaviour
 
     public string spawnThisPlant;
     public bool isPlanted;
-
     [SerializeField] GameObject plantedObject;
     
     private void Awake()
@@ -60,6 +59,7 @@ public class potScript : MonoBehaviour
                     Debug.Log("This should have set the pot parent");
                 }
             }
+            
         }
     }
 

@@ -12,12 +12,17 @@ public class tabsnotificationtestingstuff : MonoBehaviour
     [SerializeField] Text twelvecheck;
     public bool alarmpicked = false;
     int[] dayindex = new int[7];
+    int[] monthindex = new int[7];
+    int[] yearindex = new int[7];
     int weekvalue;
     int min;
     int hour;
+    int startup;
+    bool bypass;
     int [] dayident = new int[7];
     AndroidNotification a,b,c,d,e,f,g;
-    
+    public AudioSource output;
+    [SerializeField] AudioClip alarmset;
    
 
     public AndroidNotificationChannel mon = new AndroidNotificationChannel()
@@ -28,28 +33,99 @@ public class tabsnotificationtestingstuff : MonoBehaviour
         Description = "monday notifications",
         CanBypassDnd = true,
     };
-
-   
-
-    public void Start()
-    {
-        weekvalue = (int)System.DateTime.Now.DayOfWeek;
-        Debug.Log(weekvalue);
-        timeflood();
-        alarmflood();
-        timewatch();
-
-    }
-
-    
-
     public void Awake()
     {
         AndroidNotificationCenter.RegisterNotificationChannel(mon);
-       
     }
 
-    
+
+    public void Start()
+    {
+       
+        PlayerPrefs.GetInt("startup");
+        startup = PlayerPrefs.GetInt("startup");
+        PlayerPrefs.GetString("switch");
+        weekvalue = (int)System.DateTime.Now.DayOfWeek;
+        timeflood();
+        alarmflood();
+        timewatch();
+        bypass = true;
+        Debug.Log(PlayerPrefs.GetInt("startup"));
+        if (startup == 0)
+        {
+            
+            PlayerPrefs.SetInt("startup", 1);
+            
+        }
+        else
+        {
+            alarmpicked = bool.Parse(PlayerPrefs.GetString("switch"));
+            
+        }
+        
+    }
+
+    public void Update()
+    {
+        
+        Debug.Log(startup);
+        
+        
+        if(bypass == true)
+        {
+            alarmredo();
+            bypass = false;
+        }
+      
+
+    }
+
+    void alarmredo()
+    {
+        if (alarmpicked == true)
+        {
+            
+            min = PlayerPrefs.GetInt("minsave");
+            hour = PlayerPrefs.GetInt("hoursave");
+            
+            AndroidNotificationCenter.CancelAllNotifications();
+
+            for (int i = 0; i < 7; i++)
+            {
+                notify[i] = new System.DateTime(yearindex[i],monthindex[i], dayindex[i], hour, min,00);
+                
+            }
+
+            a.FireTime = notify[0];
+            b.FireTime = notify[1];
+            c.FireTime = notify[2];
+            d.FireTime = notify[3];
+            e.FireTime = notify[4];
+            f.FireTime = notify[5];
+            g.FireTime = notify[6];
+
+            dayident[0] = AndroidNotificationCenter.SendNotification(a, mon.Id);
+
+
+            dayident[1] = AndroidNotificationCenter.SendNotification(b, mon.Id);
+
+
+            dayident[2] = AndroidNotificationCenter.SendNotification(c, mon.Id);
+
+
+            dayident[3] = AndroidNotificationCenter.SendNotification(d, mon.Id);
+
+
+            dayident[4] = AndroidNotificationCenter.SendNotification(e, mon.Id);
+
+
+            dayident[5] = AndroidNotificationCenter.SendNotification(f, mon.Id);
+
+
+            dayident[6] = AndroidNotificationCenter.SendNotification(g, mon.Id);
+        }
+    }
+
     void alarmsystemflood()
     {
         
@@ -71,20 +147,23 @@ public class tabsnotificationtestingstuff : MonoBehaviour
 
     void timeflood()
     {
-        System.DateTime z = new System.DateTime();
-        notify.Add(z);
-        System.DateTime x = new System.DateTime();
-        notify.Add(x);
-        System.DateTime y = new System.DateTime();
-        notify.Add(y);
-        System.DateTime w = new System.DateTime();
-        notify.Add(w);
-        System.DateTime v = new System.DateTime();
-        notify.Add(v);
-        System.DateTime u = new System.DateTime();
-        notify.Add(u);
-        System.DateTime t = new System.DateTime();
-        notify.Add(t);
+        if (alarmpicked == false)
+        {
+            System.DateTime z = new System.DateTime();
+            notify.Add(z);
+            System.DateTime x = new System.DateTime();
+            notify.Add(x);
+            System.DateTime y = new System.DateTime();
+            notify.Add(y);
+            System.DateTime w = new System.DateTime();
+            notify.Add(w);
+            System.DateTime v = new System.DateTime();
+            notify.Add(v);
+            System.DateTime u = new System.DateTime();
+            notify.Add(u);
+            System.DateTime t = new System.DateTime();
+            notify.Add(t);
+        }
     }
     
     void alarmflood() 
@@ -136,18 +215,26 @@ public class tabsnotificationtestingstuff : MonoBehaviour
     {
         for(int i = 0; i < 7; i++)
         {
+          monthindex[i] = System.DateTime.Now.Month;
+            yearindex[i] = System.DateTime.Now.Year;
           dayindex[i]=i-weekvalue;
-            if (i < weekvalue)
+            if (i <= weekvalue)
             {
                 dayindex[i] +=7;
             }
 
-            dayindex[i] = min + dayindex[i];
 
-            if (dayindex[i]> 60)
+            dayindex[i] = dayindex[i] + System.DateTime.Now.Day;
+            if (dayindex[i]> System.DateTime.DaysInMonth(System.DateTime.Now.Year,System.DateTime.Now.Month))
             {
-                dayindex[i] = min + dayindex[i] - 60;
-                
+                dayindex[i] =  dayindex[i] - System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month);
+                monthindex[i] += 1;
+            }
+
+            if (monthindex[i]> 12)
+            {
+                monthindex[i] = monthindex[i] - 12;
+                yearindex[i] += 1;
             }
             dayindex[i] = dayindex[i];
         }
@@ -157,13 +244,17 @@ public class tabsnotificationtestingstuff : MonoBehaviour
    public void onclick()
     {
         int pmcheck=0;
+        Debug.Log("yup");
         if (alarmpicked == true)
         {
-            AndroidNotificationCenter.CancelAllScheduledNotifications();
+            
+            AndroidNotificationCenter.CancelAllNotifications();
         }
 
         alarmpicked = true;
-        if(twelvecheck.text == "PM" && txthour.text != "12")
+        PlayerPrefs.SetString("switch", alarmpicked.ToString());
+        
+      if(twelvecheck.text == "PM" && txthour.text != "12")
         {
             pmcheck = 12;
         }
@@ -173,11 +264,15 @@ public class tabsnotificationtestingstuff : MonoBehaviour
             pmcheck = 12;
         }
 
-        min = int.Parse(txtmin.text);
-        hour = int.Parse(txthour.text)+pmcheck;
-        for(int i =0; i < 7; i++)
+       min = int.Parse(txtmin.text);
+       hour = int.Parse(txthour.text)+pmcheck;
+        min = System.DateTime.Now.Minute;
+        hour = System.DateTime.Now.Hour;
+       
+        for (int i =0; i < 7; i++)
         {
-            notify[i] = new System.DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month, System.DateTime.Now.Day, hour, dayindex[i], 00);
+            notify[i] = new System.DateTime(yearindex[i], monthindex[i],dayindex[i], hour, min,00);
+            Debug.Log(notify[i]);
         }
         
 
@@ -189,54 +284,50 @@ public class tabsnotificationtestingstuff : MonoBehaviour
         f.FireTime = notify[5];
         g.FireTime = notify[6];
 
-        if (sunday == true)
-        {
+        
             dayident[0] = AndroidNotificationCenter.SendNotification(a, mon.Id);
-        }
-        if (monday == true)
-        {
+        
+        
             dayident[1] = AndroidNotificationCenter.SendNotification(b, mon.Id);
-        }
-        if (tuesday == true)
-        {
+        
+        
             dayident[2] = AndroidNotificationCenter.SendNotification(c, mon.Id);
-        }
-        if (wednesday == true)
-        {
+        
+       
             dayident[3] = AndroidNotificationCenter.SendNotification(d, mon.Id);
-        }
-        if (thursday == true)
-        {
+        
+      
             dayident[4] = AndroidNotificationCenter.SendNotification(e, mon.Id);
-        }
-        if (friday == true)
-        {
+        
+       
             dayident[5] = AndroidNotificationCenter.SendNotification(f, mon.Id);
-        }
-        if (saturday == true)
-        {
+        
+        
             dayident[6] = AndroidNotificationCenter.SendNotification(g, mon.Id);
-        }
+        PlayerPrefs.SetInt("minsave", min);
+        PlayerPrefs.SetInt("hoursave", hour);
+        output.clip = alarmset;
+        output.Play();
+
     }
 
     public void OnApplicationPause(bool pause)
     {   if (alarmpicked == true)
         {
-            
-          
             foreach(int i in dayident)
             {
                 if (AndroidNotificationCenter.CheckScheduledNotificationStatus(dayident[i]) == NotificationStatus.Delivered)
                 {
                     AndroidNotificationCenter.CancelNotification(i);
                 }
-                    
+                
+
             }
             
         }
     }
 
-   public void mondayclick()
+   /*public void mondayclick()
     {
         if (!monday)
         {
@@ -318,7 +409,7 @@ public class tabsnotificationtestingstuff : MonoBehaviour
         {
             sunday = false;
         }
-    }
+    }*/
 
     /* void calculation()
      {
