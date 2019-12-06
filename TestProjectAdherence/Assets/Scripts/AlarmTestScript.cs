@@ -74,6 +74,7 @@ public class AlarmTestScript : MonoBehaviour
         {
             hourInputDropdown.value = hourInputDropdown.options.FindIndex(option => option.text == PlayerPrefs.GetInt(this.gameObject.name + "Hour").ToString());
         }
+        Debug.Log(PlayerPrefs.GetInt(this.gameObject.name + "Hour"));
         minuteInputDropdown.value = minuteInputDropdown.options.FindIndex(option => option.text == PlayerPrefs.GetInt(this.gameObject.name + "Minute").ToString());
         PMAMInputDropdown.value = PMAMInputDropdown.options.FindIndex(option => option.text == PlayerPrefs.GetString(this.gameObject.name + "PMAM"));
         medicationName.text = PlayerPrefs.GetString(this.gameObject.name + "PRESCRIPTION");

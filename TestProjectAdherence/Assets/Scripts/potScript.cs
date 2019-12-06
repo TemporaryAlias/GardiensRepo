@@ -41,18 +41,21 @@ public class potScript : MonoBehaviour
             if (PlayerPrefs.GetInt(planttoSpawn + "Seed") > 0 || PlayerPrefs.GetInt(planttoSpawn + "(Clone)Seed") > 0)
             {
                 PlayerPrefs.SetInt(this.gameObject.name + planttoSpawn + "GrownToday", DateTime.Today.Day);
+                Debug.Log(PlayerPrefs.GetInt(planttoSpawn + "Seed")+"before");
+                PlayerPrefs.SetInt(planttoSpawn + "Seed", PlayerPrefs.GetInt(planttoSpawn + "Seed") - 1);
+                Debug.Log(PlayerPrefs.GetInt(planttoSpawn + "Seed") + "after");
                 isPlanted = true;
                 Instantiate(newPlant);
                 newPlant.name = newPlant.GetComponent<plantItem>().PLANTNAME;
                 newPlant.GetComponent<plantItem>().potParent = this.gameObject;
-                //newPlant.GetComponent<plantItem>().growthStage = 0;
+                newPlant.GetComponent<plantItem>().growthStage = 0;
                 newPlant.GetComponent<plantItem>().anim.SetTrigger("Plant");
                 flowerStage = 0; // <----------------------------------------------------------flower stage is for storing stage of contained flower on app quit
-                PlayerPrefs.SetInt(this.name + "FlowerStage", 0);
+                //PlayerPrefs.SetInt(this.name + "FlowerStage", 0);
                 plantedObject = newPlant;
                 containsFlower = planttoSpawn;
                 PlayerPrefs.SetString(this.name + "PlantedTrueFalse", "True"); // <---------------------------------------------------------- setting the playerprefbool to true as soon as it is planted
-                PlayerPrefs.SetInt(planttoSpawn + "Seed", PlayerPrefs.GetInt(planttoSpawn + "Seed") - 1);
+                
                 newPlant.GetComponent<plantItem>().potParent = this.gameObject;
                 if (newPlant.GetComponent<plantItem>().potParent = this.gameObject)
                 {

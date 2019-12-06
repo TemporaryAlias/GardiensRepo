@@ -13,7 +13,7 @@ public class detectionScript : MonoBehaviour
     private void Awake()
     {
         theManager = FindObjectOfType<playerManager>();
-        Debug.Log(theManager.gameObject.name);
+        //Debug.Log(theManager.gameObject.name);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

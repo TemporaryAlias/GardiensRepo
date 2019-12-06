@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 [System.Serializable]
@@ -55,7 +56,7 @@ public class plantItem : MonoBehaviour
     {
         this.GetComponent<SpriteRenderer>().sprite = spritesList[growthStage];
         potParent.GetComponent<potScript>().flowerStage = growthStage;
-        
+        RewardCurveFunction();
     }
 
     public void AdvanceStage()
@@ -83,10 +84,13 @@ public class plantItem : MonoBehaviour
                     break;
 
                 case 2:
-                    PlayerPrefs.SetInt(speciesNameFlower, PlayerPrefs.GetInt(speciesNameFlower) + 1);
-                    PlayerPrefs.SetInt(speciesNameSeed, PlayerPrefs.GetInt(speciesNameSeed) + 2);
+                    int bonus = bonusFunction();
+                    Debug.Log(bonus);
+                    PlayerPrefs.SetInt(speciesNameFlower, PlayerPrefs.GetInt(speciesNameFlower) + 1 + bonus);
+                    PlayerPrefs.SetInt(speciesNameSeed, PlayerPrefs.GetInt(speciesNameSeed) + 1);
+                    
                     PlayerPrefs.Save();
-
+                    
                     playerManager.Instance.TryProgessTutorial();
 
                     if (potParent != null)
@@ -94,7 +98,8 @@ public class plantItem : MonoBehaviour
                         potParent.GetComponent<potScript>().isPlanted = false;
                         PlayerPrefs.SetString(potParent.name + "PlantedTrueFalse", "False");
                         PlayerPrefs.SetInt(potParent.name + "FlowerStage", 0);
-                    Debug.Log("harvested"+ potParent.name+ "Flowerstage is: " + PlayerPrefs.GetInt(potParent.name + "FlowerStage"));
+                        potParent.GetComponent<potScript>().flowerStage = 0;
+                       //Debug.Log("harvested"+ potParent.name+ "Flowerstage is: " + PlayerPrefs.GetInt(potParent.name + "FlowerStage"));
                         PlayerPrefs.Save();
                         potParent.GetComponent<potScript>().containsFlower = "none";
                         potParent = null;
@@ -105,6 +110,51 @@ public class plantItem : MonoBehaviour
             }
         
        
+    }
+
+    float RewardCurveFunction()
+    {
+        DateTime CurrentTime = DateTime.Now;
+        DateTime AlarmTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, PlayerPrefs.GetInt("Alarm ObjectHour"), PlayerPrefs.GetInt("Alarm ObjectMinute"), DateTime.Now.Second);
+        TimeSpan TS = CurrentTime - AlarmTime;
+        float secondstohours = (Mathf.Abs(Mathf.Round((float)TS.TotalSeconds))) / 3600;
+        float functionResult = Mathf.Exp(-(Mathf.Pow(secondstohours, 2f) / 11f));
+        float ReturnedChance = (float)Mathf.Round(functionResult * 100f) / 100f;
+        //Debug.Log(ReturnedChance);
+        return ReturnedChance;
+    }
+    public void TestRewardFunction()
+    {
+        float randomNumber = UnityEngine.Random.Range(0f, 1f);
+        float numberToBeat = RewardCurveFunction();
+
+        if(randomNumber<numberToBeat)
+        {
+            Debug.Log("win reward "+randomNumber+" less than"+numberToBeat);
+        }
+        else
+        {
+            Debug.Log("lost reward " + randomNumber + " greater than" + numberToBeat);
+        }
+        //Debug.Log(numberToBeat);
+    }
+    int bonusFunction()
+    {
+        int returnedSeed;
+        float randomNumber = UnityEngine.Random.Range(0f, 1f);
+        float numberToBeat = RewardCurveFunction();
+        if (randomNumber < numberToBeat)
+        {
+            Debug.Log("win reward " + randomNumber + " less than" + numberToBeat);
+            returnedSeed = 1;
+        }
+        else
+        {
+            Debug.Log("lost reward " + randomNumber + " greater than" + numberToBeat);
+            returnedSeed = 0;
+        }
+        return returnedSeed;
+
     }
 
     private void OnDrawGizmos()

@@ -10,6 +10,9 @@ public class playerManager : MonoBehaviour
     public int TESTINGINT;
     public float WAITTIMEFLOAT;
 
+    public List<GameObject> comboInventButtons;
+    public List<GameObject> plantInventButtons;
+
     #region Alarm System UI
     [Header("Alarm System UI")]
     [SerializeField] GameObject AlarmObject;
@@ -68,6 +71,8 @@ public class playerManager : MonoBehaviour
     [SerializeField] GameObject LOG_UI_CANVAS;
     [SerializeField]GameObject DisplayInfoPanel;
     [SerializeField] Text DisplayInfoText;
+    [SerializeField] Text DisplayHour;
+    [SerializeField] Text DisplayMinute;
     [SerializeField] Text MedNameText;
     [SerializeField] List<GameObject> MonthPanels;
     [SerializeField] GameObject MonthPanelsParent;
@@ -119,7 +124,34 @@ public class playerManager : MonoBehaviour
     private void FixedUpdate()
     {
         TouchManagement();
-        GrowingPeriodTimeChecking();
+        foreach(GameObject button in comboInventButtons)
+        {
+            if(PlayerPrefs.GetInt(button.name+"Flower")>=1)
+            {
+                button.GetComponentInChildren<Text>().text = PlayerPrefs.GetInt(button.name + "Flower").ToString();
+                button.SetActive(true);
+                
+            }
+            else if (PlayerPrefs.GetInt(button.name + "Flower") < 1)
+            {
+                button.GetComponentInChildren<Text>().text = PlayerPrefs.GetInt(button.name + "Flower").ToString();
+                button.SetActive(false);
+                
+            }
+        }
+        foreach (GameObject button in plantInventButtons)
+        {
+            if (PlayerPrefs.GetInt(button.name + "Seed") >= 1)
+            {
+                button.SetActive(true);
+                button.GetComponentInChildren<Text>().text = PlayerPrefs.GetInt(button.name + "Seed").ToString();
+            }
+            else if (PlayerPrefs.GetInt(button.name + "Seed") < 1)
+            {
+                button.SetActive(false);
+                button.GetComponentInChildren<Text>().text = PlayerPrefs.GetInt(button.name + "Seed").ToString();
+            }
+        }
     }
 
     void TouchManagement()
@@ -135,8 +167,8 @@ public class playerManager : MonoBehaviour
                 {
                     
                     GameObject go = RAYHIT.collider.gameObject;
-                    go.transform.position = Vector3.Lerp(go.transform.position, Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position) + new Vector3(0, 0, 5), 0.5f);
-
+                    //go.transform.position = Vector3.Lerp(go.transform.position, Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position) + new Vector3(0, 0, 5), 0.5f);
+                    go.transform.position = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position) + new Vector3(0, 0, 5);
                     if (Input.GetTouch(0).phase == TouchPhase.Began)
                     {
                         //touchStartTime = Time.time;
@@ -213,6 +245,7 @@ public class playerManager : MonoBehaviour
             growingIcon.transform.position = Vector3.Lerp(growingIcon.transform.position, growingIconZero.position, 2f);
         }
     }
+
     void activatequestion()
     {
         if(PlayerPrefs.GetString("PillTakenToday"+DateTime.Today.Day)!="True")
@@ -534,11 +567,23 @@ public class playerManager : MonoBehaviour
 
         else //(PlayerPrefs.GetInt(month + day + "Hour").ToString() != null)
         {
-            DisplayInfoText.text = "Prescription taken at: "
-                                    + PlayerPrefs.GetInt(month + day + "Hour").ToString()
-                                    +":"
-                                    + PlayerPrefs.GetInt(month + day + "Minute").ToString();
 
+            int displayHour = PlayerPrefs.GetInt(month + day + "Hour");
+            int displayMin = PlayerPrefs.GetInt(month + day + "Minute");
+            string displayStringHour=displayHour.ToString();
+            string displayStringMinute = displayMin.ToString();
+            if(displayHour<10)
+            {
+                displayStringHour = "0" + displayHour.ToString();
+            }
+            if(displayMin<10)
+            {
+                displayStringMinute = "0" + displayMin.ToString();
+            }
+            DisplayInfoText.text = "Prescription taken at: ";
+            DisplayHour.text = displayStringHour;
+            DisplayMinute.text = displayStringMinute;
+            
         }
 
         DisplayInfoPanel.SetActive(true);
@@ -696,6 +741,9 @@ public class playerManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    public void OptionPanelEnable(GameObject paneltoenable)
+    {
+        paneltoenable.SetActive(true);
+    }
 
-   
 }

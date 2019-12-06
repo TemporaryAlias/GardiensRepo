@@ -50,7 +50,7 @@ public class tabsnotificationtestingstuff : MonoBehaviour
         alarmflood();
         timewatch();
         bypass = true;
-        Debug.Log(PlayerPrefs.GetInt("startup"));
+        //Debug.Log(PlayerPrefs.GetInt("startup"));
         if (startup == 0)
         {
             
@@ -68,7 +68,7 @@ public class tabsnotificationtestingstuff : MonoBehaviour
     public void Update()
     {
         
-        Debug.Log(startup);
+        //Debug.Log(startup);
         
         
         if(bypass == true)
@@ -272,7 +272,7 @@ public class tabsnotificationtestingstuff : MonoBehaviour
         for (int i =0; i < 7; i++)
         {
             notify[i] = new System.DateTime(yearindex[i], monthindex[i],dayindex[i], hour, min,00);
-            Debug.Log(notify[i]);
+           // Debug.Log(notify[i]);
         }
         
 
