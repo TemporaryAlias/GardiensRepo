@@ -35,9 +35,10 @@ public class potScript : MonoBehaviour
         if (!isPlanted && PlayerPrefs.GetInt(planttoSpawn + "Seed") > 0)
         {
             GameObject newPlant = (GameObject)Resources.Load("Flowers/" + planttoSpawn) as GameObject;
-            GameObject v2Plant = newPlant;
+            GameObject v2Plant = Instantiate(newPlant, new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, -3), Quaternion.identity);
+
             v2Plant.GetComponent<plantItem>().potParent = this.gameObject;
-            newPlant.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, -3);
+            v2Plant.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, -3);
             if (PlayerPrefs.GetInt(planttoSpawn + "Seed") > 0 || PlayerPrefs.GetInt(planttoSpawn + "(Clone)Seed") > 0)
             {
                 PlayerPrefs.SetInt(this.gameObject.name + planttoSpawn + "GrownToday", DateTime.Today.Day);
@@ -45,19 +46,19 @@ public class potScript : MonoBehaviour
                 PlayerPrefs.SetInt(planttoSpawn + "Seed", PlayerPrefs.GetInt(planttoSpawn + "Seed") - 1);
                 Debug.Log(PlayerPrefs.GetInt(planttoSpawn + "Seed") + "after");
                 isPlanted = true;
-                Instantiate(newPlant);
-                newPlant.name = newPlant.GetComponent<plantItem>().PLANTNAME;
-                newPlant.GetComponent<plantItem>().potParent = this.gameObject;
-                newPlant.GetComponent<plantItem>().growthStage = 0;
-                newPlant.GetComponent<plantItem>().anim.SetTrigger("Plant");
+                //Instantiate(newPlant);
+                v2Plant.name = newPlant.GetComponent<plantItem>().PLANTNAME;
+                v2Plant.GetComponent<plantItem>().potParent = this.gameObject;
+                v2Plant.GetComponent<plantItem>().growthStage = 0;
+                v2Plant.GetComponent<plantItem>().anim.SetTrigger("Plant");
                 flowerStage = 0; // <----------------------------------------------------------flower stage is for storing stage of contained flower on app quit
                 //PlayerPrefs.SetInt(this.name + "FlowerStage", 0);
-                plantedObject = newPlant;
+                plantedObject = v2Plant;
                 containsFlower = planttoSpawn;
                 PlayerPrefs.SetString(this.name + "PlantedTrueFalse", "True"); // <---------------------------------------------------------- setting the playerprefbool to true as soon as it is planted
-                
-                newPlant.GetComponent<plantItem>().potParent = this.gameObject;
-                if (newPlant.GetComponent<plantItem>().potParent = this.gameObject)
+
+                v2Plant.GetComponent<plantItem>().potParent = this.gameObject;
+                if (v2Plant.GetComponent<plantItem>().potParent = this.gameObject)
                 {
                     Debug.Log("This should have set the pot parent");
                 }

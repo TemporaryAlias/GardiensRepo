@@ -97,6 +97,8 @@ public class CombinationScript : MonoBehaviour
             output.clip = combined;
             output.Play();
             combiningMethod(A_Option, B_Option);
+        } else {
+            Debug.Log("Options were Null");
         }
     }
 
@@ -104,30 +106,21 @@ public class CombinationScript : MonoBehaviour
 
     public void combiningMethod(Text OptionA, Text OptionB)
     {
-        if (OptionA != null && OptionB != null)
-        {
+        if (OptionA != null && OptionB != null) {
             //checking if the player has enough stuff
-            if (PlayerPrefs.GetInt(OptionA.text + "Flower") > 0 && PlayerPrefs.GetInt(OptionB.text + "Flower") > 0 && OptionA.text != OptionB.text)
-            {
+            if (PlayerPrefs.GetInt(OptionA.text + "Flower") > 0 && PlayerPrefs.GetInt(OptionB.text + "Flower") > 0 && OptionA.text != OptionB.text) {
                 int valA = 0;
                 int valB = 0;
                 int valC;
-                for (int i = 0; i < thePM.FlowerNames.Count; i++)
-                {
-                    if (OptionA.text == thePM.FlowerNames[i])
-                    {
+                for (int i = 0; i < thePM.FlowerNames.Count; i++) {
+                    if (OptionA.text == thePM.FlowerNames[i]) {
                         valA = i;
-                    }
-                    else
-                    {
+                    } else {
                         //valA = 0;
                     }
-                    if (OptionB.text == thePM.FlowerNames[i])
-                    {
+                    if (OptionB.text == thePM.FlowerNames[i]) {
                         valB = i;
-                    }
-                    else
-                    {
+                    } else {
                         //valB = 0;
                     }
                 }
@@ -139,30 +132,23 @@ public class CombinationScript : MonoBehaviour
                 valC = valB + valA;
 
                 //adding a new seed based on combo
-                if (PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") < 1)
-                {
+                if (PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") < 1) {
                     PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", 1);
                     thePM.TryProgessTutorial();
-                }
-                else
-                {
+                } else {
                     PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") + 1);
                     thePM.TryProgessTutorial();
                 }
-                //Debug.Log("Combined");
+                Debug.Log("Combined");
             }
 
-            if (OptionA.text == OptionB.text)
-            {
-                if (PlayerPrefs.GetInt(OptionA.text + "Flower") > 2 && OptionA.text != OptionB.text)
-                {
+            if (OptionA.text == OptionB.text) {
+                if (PlayerPrefs.GetInt(OptionA.text + "Flower") > 2 && OptionA.text != OptionB.text) {
                     int valA = 0;
                     int valB = 0;
                     int valC;
-                    for (int i = 0; i < thePM.FlowerNames.Count; i++)
-                    {
-                        if (OptionA.text == thePM.FlowerNames[i])
-                        {
+                    for (int i = 0; i < thePM.FlowerNames.Count; i++) {
+                        if (OptionA.text == thePM.FlowerNames[i]) {
                             valA = i;
                             valB = i;
                         }
@@ -172,25 +158,21 @@ public class CombinationScript : MonoBehaviour
                     valC = valB + valA;
 
                     //adding a new seed based on combo
-                    if (PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") < 1)
-                    {
+                    if (PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") < 1) {
                         PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", 1);
                         thePM.TryProgessTutorial();
-                    }
-                    else
-                    {
+                    } else {
                         PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") + 1);
                         thePM.TryProgessTutorial();
                     }
                 }
-                
-            }
 
-            else
-            {
+            } else {
                 Debug.Log("You can't cross polinate flowers you don't have!");
             }
 
+        } else {
+            Debug.Log("Options were Null (After function call)");
         }
 
     }
