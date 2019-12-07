@@ -62,4 +62,12 @@ public class TutorialBehaviour : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    public void GiveItem(string itemToGive) {
+        if (PlayerPrefs.GetInt(itemToGive) < 1) {
+            PlayerPrefs.SetInt(itemToGive, 1);
+        } else {
+            PlayerPrefs.SetInt(itemToGive, PlayerPrefs.GetInt(itemToGive) + 1);
+        }
+    }
+
 }

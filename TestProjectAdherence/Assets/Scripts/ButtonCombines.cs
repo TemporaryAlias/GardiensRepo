@@ -17,7 +17,7 @@ public class ButtonCombines : MonoBehaviour
     public void changeOptionNameSprite()
     {
         otherText.text = this.gameObject.name;
-        optionToAlter.gameObject.name = this.gameObject.name;
+        //optionToAlter.gameObject.name = this.gameObject.name;
         otherSprite.sprite = thisSprite;
         parent.SetActive(false);
     }
