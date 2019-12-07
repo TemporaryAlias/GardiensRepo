@@ -92,6 +92,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bfbf91190ec7974b8e89259520a97e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  output: {fileID: 0}
+  watering: {fileID: 0}
+  harvesting: {fileID: 0}
+  planting: {fileID: 0}
+  growing: {fileID: 0}
 --- !u!1 &7860710083608639669
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,7 +152,7 @@ MonoBehaviour:
   seedStage: {fileID: 21300000, guid: 8e94446fe7b09be418a4049409281b92, type: 3}
   saplingStage: {fileID: 21300000, guid: 5f5c6e1c3a0da4141b06b2cd832d20ad, type: 3}
   flowerStage: {fileID: 21300000, guid: a5f3fff6324e461418eed33b5f5ec627, type: 3}
-  growthStage: 2
+  growthStage: 0
   speciesNameFlower: Rose
   speciesNameSeed: Rose
   spritesList: []

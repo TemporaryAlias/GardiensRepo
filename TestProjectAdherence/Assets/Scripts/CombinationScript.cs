@@ -9,6 +9,8 @@ public class CombinationScript : MonoBehaviour
     [SerializeField] Text A_Option;
     [SerializeField] Text B_Option;
     [SerializeField] Image comboImage;
+    [SerializeField] Image imageA, imageB;
+    [SerializeField] Sprite nullSprite;
     [SerializeField] Sprite invalidSprite;
     [SerializeField] AudioClip valid;
     [SerializeField] AudioClip invalid;
@@ -28,9 +30,19 @@ public class CombinationScript : MonoBehaviour
 
     private void Update()
     {
+        if (A_Option.text == "") {
+            imageA.sprite = nullSprite;
+        }
+
+        if (B_Option.text == "") {
+            imageB.sprite = nullSprite;
+        }
+
         int valA = 0;
         int valB = 0;
         int valC;
+
+
         for (int i = 0; i < thePM.FlowerNames.Count; i++)
         {
             if (A_Option.text == thePM.FlowerNames[i])
@@ -88,14 +100,14 @@ public class CombinationScript : MonoBehaviour
             }
             combo.sprite = invalidSprite;
         }
+
+        
     }
 
     public void CombineFlowersButton()
     {
-        if (A_Option != null && B_Option != null)
+        if (A_Option.text != "" && B_Option.text != "")
         {
-            output.clip = combined;
-            output.Play();
             combiningMethod(A_Option, B_Option);
         } else {
             Debug.Log("Options were Null");
@@ -106,9 +118,9 @@ public class CombinationScript : MonoBehaviour
 
     public void combiningMethod(Text OptionA, Text OptionB)
     {
-        if (OptionA != null && OptionB != null) {
+        if (OptionA.text != "" && OptionB.text != "") {
             //checking if the player has enough stuff
-            if (PlayerPrefs.GetInt(OptionA.text + "Flower") > 0 && PlayerPrefs.GetInt(OptionB.text + "Flower") > 0 && OptionA.text != OptionB.text) {
+            if (PlayerPrefs.GetInt(OptionA.text + "Flower") > 0 && PlayerPrefs.GetInt(OptionB.text + "Flower") > 0 ) {
                 int valA = 0;
                 int valB = 0;
                 int valC;
@@ -124,26 +136,46 @@ public class CombinationScript : MonoBehaviour
                         //valB = 0;
                     }
                 }
+
+                valC = valB + valA;
+
+                //exit function if the combo doesnt work
+                if (valC > thePM.FlowerNames.Count) {
+                    output.clip = invalid;
+                    output.Play();
+
+                    return;
+                }
                 //removing flowers for combination
 
                 PlayerPrefs.SetInt(OptionA.text + "Flower", PlayerPrefs.GetInt(OptionA.text + "Flower") - 1);
                 PlayerPrefs.SetInt(OptionB.text + "Flower", PlayerPrefs.GetInt(OptionB.text + "Flower") - 1);
 
-                valC = valB + valA;
+                
 
                 //adding a new seed based on combo
                 if (PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") < 1) {
                     PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", 1);
                     thePM.TryProgessTutorial();
+
+                    output.clip = combined;
+                    output.Play();
                 } else {
                     PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") + 1);
                     thePM.TryProgessTutorial();
+
+                    output.clip = combined;
+                    output.Play();
                 }
                 Debug.Log("Combined");
+
+                //Reset buttons
+                A_Option.text = null;
+                B_Option.text = null;
             }
 
             if (OptionA.text == OptionB.text) {
-                if (PlayerPrefs.GetInt(OptionA.text + "Flower") > 2 && OptionA.text != OptionB.text) {
+                if (PlayerPrefs.GetInt(OptionA.text + "Flower") > 2 && OptionA.text == OptionB.text) {
                     int valA = 0;
                     int valB = 0;
                     int valC;
@@ -153,20 +185,40 @@ public class CombinationScript : MonoBehaviour
                             valB = i;
                         }
                     }
+
+                    valC = valA + valB;
+
+                    //exit function if the combo doesnt work
+                    if (valC > thePM.FlowerNames.Count) {
+                        output.clip = invalid;
+                        output.Play();
+
+                        return;
+                    }
+
                     PlayerPrefs.SetInt(OptionA.text + "Flower", PlayerPrefs.GetInt(OptionA.text + "Flower") - 2);
 
-                    valC = valB + valA;
+                    //alC = valB + valA;
 
                     //adding a new seed based on combo
                     if (PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") < 1) {
                         PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", 1);
                         thePM.TryProgessTutorial();
+
+                        output.clip = combined;
+                        output.Play();
                     } else {
                         PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") + 1);
                         thePM.TryProgessTutorial();
+
+                        output.clip = combined;
+                        output.Play();
                     }
                 }
 
+                //Reset buttons
+                A_Option.text = null;
+                B_Option.text = null;
             } else {
                 Debug.Log("You can't cross polinate flowers you don't have!");
             }

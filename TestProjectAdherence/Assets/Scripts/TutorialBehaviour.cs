@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialBehaviour : MonoBehaviour {
 
     [SerializeField] List<Popup> tutorialPopups = new List<Popup>();
+    [SerializeField] List<Button> interactables = new List<Button>();
 
     int currentPopup;
 
     private void Start() {
 
         //debug to test the tutorial, comment out to stop having to do the tutorial every time
-        //PlayerPrefs.SetString("Seen Tutorial", "FALSE");
+        PlayerPrefs.SetString("Seen Tutorial", "TRUE");
 
         if (PlayerPrefs.GetString("Seen Tutorial") == "TRUE") {
             gameObject.SetActive(false);
@@ -22,6 +24,10 @@ public class TutorialBehaviour : MonoBehaviour {
     }
 
     void StartTutorial() {
+        foreach (Button button in interactables) {
+            button.interactable = false;
+        }
+
         currentPopup = 0;
 
         tutorialPopups[currentPopup].gameObject.SetActive(true);
@@ -48,6 +54,10 @@ public class TutorialBehaviour : MonoBehaviour {
 
     void EndTutorial() {
         PlayerPrefs.SetString("Seen Tutorial", "TRUE");
+
+        foreach (Button button in interactables) {
+            button.interactable = true;
+        }
 
         gameObject.SetActive(false);
     }
