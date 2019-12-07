@@ -27,6 +27,9 @@ public class plantItem : MonoBehaviour
     public int growthStage;
 
     [SerializeField] string speciesNameFlower, speciesNameSeed;
+    [SerializeField] GameObject bonusNotif;
+
+    Canvas uiCanvas;
 
     public List<Sprite> spritesList;
     private void Awake()
@@ -47,6 +50,8 @@ public class plantItem : MonoBehaviour
         anim = GetComponent<Animator>();
 
         this.GetComponent<SpriteRenderer>().sprite = spritesList[growthStage];
+
+        uiCanvas = FindObjectOfType<Canvas>();
     }
 
    
@@ -147,6 +152,8 @@ public class plantItem : MonoBehaviour
         {
             Debug.Log("win reward " + randomNumber + " less than" + numberToBeat);
             returnedSeed = 1;
+
+            Instantiate(bonusNotif, uiCanvas.transform);
         }
         else
         {

@@ -58,6 +58,8 @@ MonoBehaviour:
   growthStage: 0
   speciesNameFlower: Daffodil
   speciesNameSeed: Daffodil
+  bonusNotif: {fileID: 6513074014111565486, guid: 79f3ef32ca67d884785e1737164a1005,
+    type: 3}
   spritesList: []
 --- !u!212 &2693162494494900648
 SpriteRenderer:
@@ -265,3 +267,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bfbf91190ec7974b8e89259520a97e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  output: {fileID: 0}
+  watering: {fileID: 0}
+  harvesting: {fileID: 0}
+  planting: {fileID: 0}
+  growing: {fileID: 0}

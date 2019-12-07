@@ -155,6 +155,8 @@ MonoBehaviour:
   growthStage: 0
   speciesNameFlower: Dandelion
   speciesNameSeed: Dandelion
+  bonusNotif: {fileID: 6513074014111565486, guid: 79f3ef32ca67d884785e1737164a1005,
+    type: 3}
   spritesList: []
 --- !u!212 &5029200850866986419
 SpriteRenderer:
