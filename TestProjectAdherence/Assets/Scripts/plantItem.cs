@@ -30,6 +30,7 @@ public class plantItem : MonoBehaviour
     [SerializeField] GameObject bonusNotif;
 
     Canvas uiCanvas;
+    Animator potAnim;
 
     public List<Sprite> spritesList;
     private void Awake()
@@ -61,7 +62,15 @@ public class plantItem : MonoBehaviour
     {
         this.GetComponent<SpriteRenderer>().sprite = spritesList[growthStage];
         potParent.GetComponent<potScript>().flowerStage = growthStage;
+        potAnim = potParent.GetComponent<Animator>();
+
         RewardCurveFunction();
+
+        if (PlayerPrefs.GetInt(potParent.name + PLANTNAME + "GrownToday") == DateTime.Today.Day) {
+            potAnim.SetBool("Watered", true);
+        } else {
+            potAnim.SetBool("Watered", false);
+        }
     }
 
     public void AdvanceStage()

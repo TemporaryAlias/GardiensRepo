@@ -783,4 +783,8 @@ public class playerManager : MonoBehaviour
         paneltoenable.SetActive(true);
     }
 
+    public void SetTestingInt(int newInt) {
+        TESTINGINT = newInt;
+    }
+
 }
