@@ -119,6 +119,7 @@ public class plantItem : MonoBehaviour
                         potParent = null;
                     }
 
+                    potAnim.SetBool("Watered", false);
                     Destroy(this.gameObject);
                     break;
             }
