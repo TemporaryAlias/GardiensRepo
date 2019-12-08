@@ -12,6 +12,12 @@ public class playerManager : MonoBehaviour
 
     public List<GameObject> comboInventButtons;
     public List<GameObject> plantInventButtons;
+    public AudioSource output;
+    [SerializeField] AudioClip growing;
+    [SerializeField] AudioClip planting;
+    [SerializeField] AudioClip firstgrowth;
+    [SerializeField] AudioClip watering;
+    [SerializeField] AudioClip harvesting;
 
     #region Alarm System UI
     [Header("Alarm System UI")]
@@ -197,7 +203,10 @@ public class playerManager : MonoBehaviour
                                     go.gameObject.GetComponentInChildren<detectionScript>(QueryTriggerInteraction.Collide.Equals(gameObject.tag == "FlowerPot"))==true
                                     && PotToAlter.gameObject.GetComponent<potScript>().isPlanted == false)
                                 {
+                                    output.clip = planting;
+                                    output.Play();
                                     INVENTORY_UI_CANVAS.SetActive(true);
+                                    
                                 }
                                 break;
 
@@ -205,6 +214,8 @@ public class playerManager : MonoBehaviour
                                 go.transform.position = Vector3.Lerp(go.transform.position, harvestIconZero.position, 2f * Time.deltaTime);
                                 if (PlantToAdvance != null && PlantToAdvance.GetComponent<plantItem>().growthStage>1)
                                 {
+                                    output.clip = harvesting;
+                                    output.Play();
                                     //Commented out to test the animations
                                     //PlantToAdvance.GetComponent<plantItem>().AdvanceStage();
 
@@ -221,7 +232,8 @@ public class playerManager : MonoBehaviour
                                 {
                                     foreach (GameObject AlarmObject in AlarmObjectsList)
                                     {
-                                        
+                                        output.clip = watering;
+                                        output.Play();
                                             Debug.Log("Grow Connected to Player Pref Time");
                                             PlayerPrefs.SetInt(PlantToAdvance.GetComponent<plantItem>().potParent.name + PlantToAdvance.GetComponent<plantItem>().PLANTNAME + "GrownToday", DateTime.Today.Day);
 
@@ -229,6 +241,8 @@ public class playerManager : MonoBehaviour
                                         //PlantToAdvance.GetComponent<plantItem>().AdvanceStage();
 
                                             PlantToAdvance.GetComponent<plantItem>().anim.SetTrigger("Grow");
+                                        output.clip = firstgrowth;
+                                        output.Play();
 
                                             TryProgessTutorial();
                                         
@@ -354,7 +368,8 @@ public class playerManager : MonoBehaviour
         var PotObjectScript = PotToAlter.GetComponent<potScript>();
         PotObjectScript.SpawnNewPlant(theButtonClicked.name);
         PotObjectScript.containsFlower = theButtonClicked.name;
-
+        output.clip = firstgrowth;
+        output.Play();
         INVENTORY_UI_CANVAS.SetActive(false);
     }
     

@@ -59,10 +59,11 @@ public class tabsnotificationtestingstuff : MonoBehaviour
         }
         else
         {
+            
             alarmpicked = bool.Parse(PlayerPrefs.GetString("switch"));
             
         }
-        
+        timewatch();
     }
 
     public void Update()
@@ -123,6 +124,8 @@ public class tabsnotificationtestingstuff : MonoBehaviour
 
 
             dayident[6] = AndroidNotificationCenter.SendNotification(g, mon.Id);
+           
+            timewatch();
         }
     }
 
@@ -218,11 +221,14 @@ public class tabsnotificationtestingstuff : MonoBehaviour
           monthindex[i] = System.DateTime.Now.Month;
             yearindex[i] = System.DateTime.Now.Year;
           dayindex[i]=i-weekvalue;
-            if (i < weekvalue)
-            {
-                dayindex[i] +=7;
-            }
+           
+                if (i < weekvalue)
+                {
+                    dayindex[i] += 7;
+                }
+            
 
+          
 
             dayindex[i] = dayindex[i] + System.DateTime.Now.Day;
             if (dayindex[i]> System.DateTime.DaysInMonth(System.DateTime.Now.Year,System.DateTime.Now.Month))
@@ -316,7 +322,7 @@ public class tabsnotificationtestingstuff : MonoBehaviour
         {
             foreach(int i in dayident)
             {
-                if (AndroidNotificationCenter.CheckScheduledNotificationStatus(dayident[i]) == NotificationStatus.Delivered)
+                if (AndroidNotificationCenter.CheckScheduledNotificationStatus(dayident[i]) == NotificationStatus.Delivered || AndroidNotificationCenter.CheckScheduledNotificationStatus(dayident[i]) == NotificationStatus.Unknown)
                 {
                     AndroidNotificationCenter.CancelNotification(i);
                 }
