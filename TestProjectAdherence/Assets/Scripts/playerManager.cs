@@ -64,6 +64,9 @@ public class playerManager : MonoBehaviour
 
     [Header("Ask Canvas UI")]
     [SerializeField] GameObject ASK_UI_CANVAS;
+
+    [Header("Clear Data Ask Canvas UI")]
+    [SerializeField] GameObject CLEAR_UI_CANVAS;
     #endregion
 
     #region Logging Info Display Ui
@@ -78,7 +81,7 @@ public class playerManager : MonoBehaviour
     [SerializeField] GameObject MonthPanelsParent;
 
     #endregion
-
+    
 
     [Header("Tutorial")]
     [SerializeField] TutorialBehaviour tutorialManager;
@@ -560,18 +563,19 @@ public class playerManager : MonoBehaviour
         string month = daySelected.gameObject.transform.parent.name;
         string day = daySelected.name;
         
-        if(PlayerPrefs.GetInt(month + day + "Minute").ToString() == "0") // PlayerPrefs.GetInt(month + day + "Hour").ToString() == "0" && PlayerPrefs.GetString("January" + DateTime.Today.Day + "CHECKEDPMAM") != "PM" ||
+        if(PlayerPrefs.GetString(month + day + "TAKEN") != "TRUE") // PlayerPrefs.GetInt(month + day + "Hour").ToString() == "0" && PlayerPrefs.GetString("January" + DateTime.Today.Day + "CHECKEDPMAM") != "PM" ||
         {
             DisplayInfoText.text = "Prescription Was Not Taken";
+            DisplayHour.text = "";
+            DisplayMinute.text = "";
         }
-
-        else //(PlayerPrefs.GetInt(month + day + "Hour").ToString() != null)
+        else
         {
-
             int displayHour = PlayerPrefs.GetInt(month + day + "Hour");
             int displayMin = PlayerPrefs.GetInt(month + day + "Minute");
             string displayStringHour=displayHour.ToString();
             string displayStringMinute = displayMin.ToString();
+            
             if(displayHour<10)
             {
                 displayStringHour = "0" + displayHour.ToString();
@@ -581,8 +585,9 @@ public class playerManager : MonoBehaviour
                 displayStringMinute = "0" + displayMin.ToString();
             }
             DisplayInfoText.text = "Prescription taken at: ";
-            DisplayHour.text = displayStringHour;
-            DisplayMinute.text = displayStringMinute;
+            
+                DisplayHour.text = displayStringHour+"  :";
+                DisplayMinute.text = displayStringMinute;
             
         }
 
@@ -604,6 +609,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("January" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("January" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 2:
                 PlayerPrefs.SetInt("February" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -614,6 +621,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("February" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("February" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 3:
                 PlayerPrefs.SetInt("March" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -624,6 +633,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("March" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("March" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 4:
                 PlayerPrefs.SetInt("April" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -634,6 +645,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("April" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("April" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 5:
                 PlayerPrefs.SetInt("May" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -644,6 +657,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("May" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("May" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 6:
                 PlayerPrefs.SetInt("June" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -654,6 +669,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("June" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("June" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 7:
                 PlayerPrefs.SetInt("July" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -664,6 +681,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("July" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("July" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 8:
                 PlayerPrefs.SetInt("August" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -674,6 +693,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("August" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("August" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 9:
                 PlayerPrefs.SetInt("September" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -684,6 +705,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("September" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("September" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 10:
                 PlayerPrefs.SetInt("October" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -694,6 +717,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("October" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("October" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 11:
                 PlayerPrefs.SetInt("November" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -704,6 +729,8 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("November" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("November" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
             case 12:
                 PlayerPrefs.SetInt("December" + DateTime.Today.Day + "Hour", DateTime.Now.Hour);
@@ -714,18 +741,28 @@ public class playerManager : MonoBehaviour
                 {
                     PlayerPrefs.SetString("December" + DateTime.Today.Day + "CHECKEDPMAM", "PM");
                 }
+                PlayerPrefs.SetString("December" + DateTime.Today.Day + "TAKEN", "TRUE");
+                PlayerPrefs.Save();
                 break;
 
         }
     }
 
+    public void openAskPanel()
+    {
+        ASK_UI_CANVAS.SetActive(true);
+    }
+    public void openClearDataPanel()
+    {
+        CLEAR_UI_CANVAS.SetActive(true);
+    }
     //clearing player data button
     public void ClearData()
     {
         PlayerPrefs.DeleteAll();
         Caching.ClearCache();
-        
-        PlayerPrefs.Save();
+        PlayerPrefs.DeleteAll();
+
         Application.Quit();
     }
 
