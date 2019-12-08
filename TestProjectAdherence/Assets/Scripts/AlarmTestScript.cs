@@ -42,7 +42,9 @@ public class AlarmTestScript : MonoBehaviour
     [SerializeField] Text minuteInput;
     [SerializeField] Button setAlarm; //button to activate function
     [SerializeField] Text medicationName;
+    [SerializeField] Text medicationNamePH;
     [SerializeField] Text medicationDosage;
+
     #endregion
     //List of Notifications to check through
     [SerializeField] List<AndroidNotification> notificationsList; // <-------------------------------------- make a list of notifications
@@ -62,7 +64,8 @@ public class AlarmTestScript : MonoBehaviour
     {
         var hourInputDropdown = hourInput.GetComponentInParent<Dropdown>();
         var minuteInputDropdown = minuteInput.GetComponentInParent<Dropdown>();
-        var PMAMInputDropdown = PMAMInput.GetComponentInParent<Dropdown>(); 
+        var PMAMInputDropdown = PMAMInput.GetComponentInParent<Dropdown>();
+        var DosageDropdown = medicationDosage.GetComponentInParent<Dropdown>();
 
        
         if (PlayerPrefs.GetInt(this.gameObject.name + "Hour")>12)
@@ -78,7 +81,8 @@ public class AlarmTestScript : MonoBehaviour
         minuteInputDropdown.value = minuteInputDropdown.options.FindIndex(option => option.text == PlayerPrefs.GetInt(this.gameObject.name + "Minute").ToString());
         PMAMInputDropdown.value = PMAMInputDropdown.options.FindIndex(option => option.text == PlayerPrefs.GetString(this.gameObject.name + "PMAM"));
         medicationName.text = PlayerPrefs.GetString(this.gameObject.name + "PRESCRIPTION");
-        medicationDosage.text = PlayerPrefs.GetString(this.gameObject.name + "DOSAGE");
+        medicationNamePH.text = PlayerPrefs.GetString(this.gameObject.name + "PRESCRIPTION");
+        DosageDropdown.value = DosageDropdown.options.FindIndex(option => option.text == PlayerPrefs.GetString(this.gameObject.name + "DOSAGE"));
 
         AndroidNotificationCenter.RegisterNotificationChannel(PublicChannel);
         notificationsList = new List<AndroidNotification>();
@@ -180,8 +184,12 @@ public class AlarmTestScript : MonoBehaviour
             PlayerPrefs.Save();
             PlayerPrefs.SetString(this.gameObject.name + "PMAM", PMAMInput.text);
             PlayerPrefs.Save();
-            PlayerPrefs.SetString(this.gameObject.name + "PRESCRIPTION", medicationName.text);
-            PlayerPrefs.Save();
+            if (medicationName.text != null)
+            {
+                PlayerPrefs.SetString(this.gameObject.name + "PRESCRIPTION", medicationName.text);
+                PlayerPrefs.Save();
+            }
+
             PlayerPrefs.SetString(this.gameObject.name + "DOSAGE", medicationDosage.text);
             PlayerPrefs.Save();
         }

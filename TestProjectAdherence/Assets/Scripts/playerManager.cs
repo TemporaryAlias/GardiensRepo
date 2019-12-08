@@ -244,7 +244,7 @@ public class playerManager : MonoBehaviour
                                         output.clip = firstgrowth;
                                         output.Play();
 
-                                            TryProgessTutorial();
+                                            //TryProgessTutorial();
                                         
                                     }
                                     
@@ -778,9 +778,13 @@ public class playerManager : MonoBehaviour
         Caching.ClearCache();
         PlayerPrefs.DeleteAll();
 
+        StartCoroutine("waittoQuit");
+    }
+    IEnumerator waittoQuit()
+    {
+        yield return new WaitForSecondsRealtime(2f);
         Application.Quit();
     }
-
     public void SaveAndQuitApp()
     {
         foreach (GameObject pot in POTSLIST)

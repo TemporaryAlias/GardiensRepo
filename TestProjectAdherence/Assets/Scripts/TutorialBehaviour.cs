@@ -13,7 +13,7 @@ public class TutorialBehaviour : MonoBehaviour {
     private void Start() {
 
         //debug to test the tutorial, comment out to stop having to do the tutorial every time
-        PlayerPrefs.SetString("Seen Tutorial", "TRUE");
+        //PlayerPrefs.SetString("Seen Tutorial", "FALSE");
 
         if (PlayerPrefs.GetString("Seen Tutorial") == "TRUE") {
             gameObject.SetActive(false);
