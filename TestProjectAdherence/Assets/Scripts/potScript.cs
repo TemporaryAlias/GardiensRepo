@@ -22,12 +22,12 @@ public class potScript : MonoBehaviour
     {
         theManager = FindObjectOfType<playerManager>();
         isPlanted = false;
-        
+        loadData();
     }
 
     private void Start()
     {
-        loadData();
+        //loadData();
     }
 
     public void SpawnNewPlant(string planttoSpawn)
@@ -85,7 +85,7 @@ public class potScript : MonoBehaviour
 
     void loadData()
     {
-
+        Debug.Log("LOaded");
         if (PlayerPrefs.GetString(this.name + "PlantedTrueFalse") == "True")
         {
             foreach (String name in theManager.FlowerNames)
@@ -117,6 +117,11 @@ public class potScript : MonoBehaviour
         {
             isPlanted = false;
         }
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        saveData();
     }
 
     private void OnApplicationQuit()

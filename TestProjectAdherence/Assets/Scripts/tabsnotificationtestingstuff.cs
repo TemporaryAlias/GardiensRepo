@@ -169,45 +169,45 @@ public class tabsnotificationtestingstuff : MonoBehaviour
     void alarmflood() 
     {
         a = new AndroidNotification();
-        a.Title = "Take the pill yo";
-        a.Text = "this Irwin yo ready to help";
+        a.Title = "Have you watered your plants today?";
+        a.Text = "You should check up on your terrarium!";
       
         
 
         b = new AndroidNotification();
-        b.Title = "Take the pill we bang ok";
-        b.Text = "im commander shepard and i approve this message";
+        b.Title = "Have you watered your plants today?";
+        b.Text = "You should check up on your terrarium!";
         
 
         c = new AndroidNotification();
-        c.Title = "Take the pill";
-        c.Text = "Experience the true mans world";
-        
+        c.Title = "Have you watered your plants today?";
+        c.Text = "You should check up on your terrarium!";
+
 
 
         d = new AndroidNotification();
-        d.Title = "GRIFFFFFFFITHHHHH!!!!!!";
-        d.Text = "GRIIIIIIIIIIIFFFFFFFFFIIIIIITH";
-        
+        d.Title = "Have you watered your plants today?";
+        d.Text = "You should check up on your terrarium!";
+
 
 
         e = new AndroidNotification();
-        e.Title = "DUN DUN DUN DUN";
-        e.Text = "another one takes the pill";
-        
+        e.Title = "Have you watered your plants today?";
+        e.Text = "You should check up on your terrarium!";
+
 
 
         f = new AndroidNotification();
-        f.Title = "Depression is pretty sus bro";
-        f.Text = "-Eoin McSharry";
-        
+        f.Title = "Have you watered your plants today?";
+        f.Text = "You should check up on your terrarium!";
 
 
-  
+
+
         g = new AndroidNotification();
-        g.Title = "Bruh";
-        g.Text = "-Aaron Kennedy";
-        
+        g.Title = "Have you watered your plants today?";
+        g.Text = "You should check up on your terrarium!";
+
 
     }
 
@@ -218,7 +218,7 @@ public class tabsnotificationtestingstuff : MonoBehaviour
           monthindex[i] = System.DateTime.Now.Month;
             yearindex[i] = System.DateTime.Now.Year;
           dayindex[i]=i-weekvalue;
-            if (i <= weekvalue)
+            if (i < weekvalue)
             {
                 dayindex[i] +=7;
             }
@@ -266,13 +266,13 @@ public class tabsnotificationtestingstuff : MonoBehaviour
 
        min = int.Parse(txtmin.text);
        hour = int.Parse(txthour.text)+pmcheck;
-        min = System.DateTime.Now.Minute;
-        hour = System.DateTime.Now.Hour;
+       // min = System.DateTime.Now.Minute;
+       // hour = System.DateTime.Now.Hour;
        
         for (int i =0; i < 7; i++)
         {
             notify[i] = new System.DateTime(yearindex[i], monthindex[i],dayindex[i], hour, min,00);
-           // Debug.Log(notify[i]);
+            Debug.Log(notify[i]);
         }
         
 

@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/OpeningScene.unity
-    guid: d8fe6d9a4e697154a8df2fdfee620e99
   - enabled: 1
     path: Assets/Scenes/TerrariumTestScreen.unity
     guid: 4be7de1d1054c9a41bb07a98c1ab1425
