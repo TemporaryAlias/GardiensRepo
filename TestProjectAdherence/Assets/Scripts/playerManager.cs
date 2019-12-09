@@ -122,7 +122,7 @@ public class playerManager : MonoBehaviour
     
     private void Awake()
     {
-        
+        //PlayerPrefs.DeleteAll();
         _instance = this;
         if(PlayerPrefs.GetInt("DaffodilSeed")<1)
         {

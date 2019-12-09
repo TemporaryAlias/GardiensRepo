@@ -85,6 +85,11 @@ public class potScript : MonoBehaviour
 
     void loadData()
     {
+        if(PlayerPrefs.GetString("Seen Tutorial") != "TRUE")
+        {
+            PlayerPrefs.DeleteAll();
+            Caching.ClearCache();
+        }
         Debug.Log("LOaded");
         if (PlayerPrefs.GetString(this.name + "PlantedTrueFalse") == "True")
         {

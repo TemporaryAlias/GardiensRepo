@@ -11,7 +11,7 @@ public class TutorialBehaviour : MonoBehaviour {
     int currentPopup;
 
     private void Start() {
-
+        
         //debug to test the tutorial, comment out to stop having to do the tutorial every time
         //PlayerPrefs.SetString("Seen Tutorial", "FALSE");
 
