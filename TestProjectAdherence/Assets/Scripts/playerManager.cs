@@ -241,7 +241,7 @@ public class playerManager : MonoBehaviour
                                         //PlantToAdvance.GetComponent<plantItem>().AdvanceStage();
 
                                             PlantToAdvance.GetComponent<plantItem>().anim.SetTrigger("Grow");
-                                        output.clip = firstgrowth;
+                                        output.clip = growing;
                                         output.Play();
 
                                             //TryProgessTutorial();

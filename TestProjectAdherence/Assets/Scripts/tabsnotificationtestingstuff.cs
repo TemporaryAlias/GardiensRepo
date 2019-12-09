@@ -18,6 +18,7 @@ public class tabsnotificationtestingstuff : MonoBehaviour
     int min;
     int hour;
     int startup;
+    int timemin,timehour,timeday;
     bool bypass;
     int [] dayident = new int[7];
     AndroidNotification a,b,c,d,e,f,g;
@@ -88,13 +89,50 @@ public class tabsnotificationtestingstuff : MonoBehaviour
             
             min = PlayerPrefs.GetInt("minsave");
             hour = PlayerPrefs.GetInt("hoursave");
-            
+            timemin = System.DateTime.Now.Minute;
+        timehour = System.DateTime.Now.Hour;
+        timeday = System.DateTime.Now.Day;
             AndroidNotificationCenter.CancelAllNotifications();
 
             for (int i = 0; i < 7; i++)
             {
                 notify[i] = new System.DateTime(yearindex[i],monthindex[i], dayindex[i], hour, min,00);
-                
+
+                if (hour < timehour && notify[i].Day == timeday)
+                {
+                    dayindex[i] = dayindex[i] + 7;
+                    if (dayindex[i] > System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month))
+                    {
+                        dayindex[i] = dayindex[i] - System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month);
+                        monthindex[i] += 1;
+                    }
+
+                    if (monthindex[i] > 12)
+                    {
+                        monthindex[i] = monthindex[i] - 12;
+                        yearindex[i] += 1;
+                    }
+                    notify[i] = new System.DateTime(yearindex[i], monthindex[i], dayindex[i], hour, min, 00);
+                }
+                if (hour == timehour && notify[i].Day == timeday)
+                {
+                    if (min < timemin)
+                    {
+                        dayindex[i] = dayindex[i] + 7;
+                        if (dayindex[i] > System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month))
+                        {
+                            dayindex[i] = dayindex[i] - System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month);
+                            monthindex[i] += 1;
+                        }
+
+                        if (monthindex[i] > 12)
+                        {
+                            monthindex[i] = monthindex[i] - 12;
+                            yearindex[i] += 1;
+                        }
+                        notify[i] = new System.DateTime(yearindex[i], monthindex[i], dayindex[i], hour, min, 00);
+                    }
+                }
             }
 
             a.FireTime = notify[0];
@@ -267,17 +305,55 @@ public class tabsnotificationtestingstuff : MonoBehaviour
 
         if(twelvecheck.text == "AM" && txthour.text == "12")
         {
-            pmcheck = 12;
+            pmcheck = -12;
         }
 
        min = int.Parse(txtmin.text);
        hour = int.Parse(txthour.text)+pmcheck;
-       // min = System.DateTime.Now.Minute;
-       // hour = System.DateTime.Now.Hour;
+        
+        timemin = System.DateTime.Now.Minute;
+        timehour = System.DateTime.Now.Hour;
+        timeday = System.DateTime.Now.Day;
        
         for (int i =0; i < 7; i++)
         {
             notify[i] = new System.DateTime(yearindex[i], monthindex[i],dayindex[i], hour, min,00);
+            
+            if (hour < timehour && dayindex[i] == timeday )
+            {
+                dayindex[i] = dayindex[i] +7;
+                if (dayindex[i] > System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month))
+                {
+                    dayindex[i] = dayindex[i] - System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month);
+                    monthindex[i] += 1;
+                }
+
+                if (monthindex[i] > 12)
+                {
+                    monthindex[i] = monthindex[i] - 12;
+                    yearindex[i] += 1;
+                }
+                notify[i] = new System.DateTime(yearindex[i], monthindex[i], dayindex[i], hour, min, 00);
+            }
+            if(hour==timehour && dayindex[i] == timeday)
+            {
+                if (min < timemin)
+                {
+                    dayindex[i] = dayindex[i] + 7;
+                    if (dayindex[i] > System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month))
+                    {
+                        dayindex[i] = dayindex[i] - System.DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month);
+                        monthindex[i] += 1;
+                    }
+
+                    if (monthindex[i] > 12)
+                    {
+                        monthindex[i] = monthindex[i] - 12;
+                        yearindex[i] += 1;
+                    }
+                    notify[i] = new System.DateTime(yearindex[i], monthindex[i], dayindex[i], hour, min, 00);
+                }
+            }
             Debug.Log(notify[i]);
         }
         

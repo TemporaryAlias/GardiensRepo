@@ -31,6 +31,10 @@ public class CombinationScript : MonoBehaviour
         combineAnim = combineAnimationGroup.GetComponent<Animator>();
     }
 
+   public void boolcheck()
+    {
+        soundcheck = false;
+    }
 
     private void Update()
     {
@@ -68,45 +72,56 @@ public class CombinationScript : MonoBehaviour
         {
             if(PlayerPrefs.GetInt(A_Option.text + "Flower") > 0 && PlayerPrefs.GetInt(B_Option.text + "Flower") > 0 && A_Option.text != B_Option.text)
             {
-                output.clip = valid;
-                //output.Play();
+                if (soundcheck == false)
+                {
+                    output.clip = valid;
+                    output.Play();
+                    soundcheck = true;
+                }
                 GameObject newPlant = (GameObject)Resources.Load("Flowers/" + thePM.FlowerNames[valC]) as GameObject;
 
                 combo.sprite = newPlant.GetComponent<plantItem>().seedStage;
-                soundcheck = false;
+                
             }
             if(PlayerPrefs.GetInt(A_Option.text + "Flower") >= 2 && A_Option.text == B_Option.text)
             {
-                output.clip = valid;
+                if (soundcheck == false)
+                {
+                    output.clip = valid;
+                    output.Play();
+                    soundcheck = true;
+                }
                 GameObject newPlant = (GameObject)Resources.Load("Flowers/" + thePM.FlowerNames[valC]) as GameObject;
 
                 combo.sprite = newPlant.GetComponent<plantItem>().seedStage;
-                soundcheck = false;
+                
             }
             else if(PlayerPrefs.GetInt(A_Option.text + "Flower") <= 2 && A_Option.text == B_Option.text || PlayerPrefs.GetInt(A_Option.text + "Flower") <= 0 && PlayerPrefs.GetInt(B_Option.text + "Flower") <= 0 && A_Option.text != B_Option.text)
             {
-                if (soundcheck == false)
-                {
-                    output.clip = invalid;
-                    //output.Play();
-                    soundcheck = true;
-                }
+                
 
                 if (!animating) {
                     combo.sprite = invalidSprite;
+                    if (soundcheck == false)
+                    {
+                        output.clip = invalid;
+                        output.Play();
+                        soundcheck = true;
+                    }
                 }
             }
         }
         else
         {
-            if (soundcheck == false)
-            {
-                output.clip = invalid;
-                //output.Play();
-                soundcheck = true;
-            }
+            
             if (!animating) {
                 combo.sprite = invalidSprite;
+                if (soundcheck == false)
+                {
+                    output.clip = invalid;
+                    output.Play();
+                    soundcheck = true;
+                }
             }
         }
 
@@ -117,8 +132,12 @@ public class CombinationScript : MonoBehaviour
     {
         if (A_Option.text != "" && B_Option.text != "")
         {
+            output.clip = combined;
+            output.Play();
             StartCoroutine(combiningMethod(A_Option, B_Option));
         } else {
+            output.clip = invalid;
+            output.Play();
             Debug.Log("Options were Null");
         }
     }
@@ -167,8 +186,7 @@ public class CombinationScript : MonoBehaviour
                     PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", 1);
                     combineAnim.SetTrigger("Combine");
 
-                    output.clip = combined;
-                    output.Play();
+                   
 
                     animating = true;
                     yield return new WaitForSeconds(3f);
@@ -179,8 +197,7 @@ public class CombinationScript : MonoBehaviour
                     PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") + 1);
                     combineAnim.SetTrigger("Combine");
 
-                    output.clip = combined;
-                    output.Play();
+                    
 
                     animating = true;
                     yield return new WaitForSeconds(3f);
@@ -227,8 +244,7 @@ public class CombinationScript : MonoBehaviour
                         
                         combineAnim.SetTrigger("Combine");
 
-                        output.clip = combined;
-                        output.Play();
+                       
 
                         animating = true;
                         yield return new WaitForSeconds(3f);
@@ -239,8 +255,7 @@ public class CombinationScript : MonoBehaviour
                         PlayerPrefs.SetInt(thePM.FlowerNames[valC] + "Seed", PlayerPrefs.GetInt(thePM.FlowerNames[valC] + "Seed") + 1);
                         combineAnim.SetTrigger("Combine");
 
-                        output.clip = combined;
-                        output.Play();
+                        
 
                         animating = true;
                         yield return new WaitForSeconds(3f);
